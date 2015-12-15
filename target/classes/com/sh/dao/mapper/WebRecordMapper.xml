@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里的namespace名字必须为执行该sql的dao地址&nbsp; -->
+<mapper namespace="com.sh.mapper.WebRecordMapper">
+
+	<resultMap type="com.sh.domain.WebRecord" id="webRecordMap">
+		<id property="webRecordId" column="web_record_id" />
+		<result property="title" column="title" jdbcType="VARCHAR" />
+		<result property="href" column="href" jdbcType="VARCHAR" />
+		<result property="content" column="content" jdbcType="VARCHAR" />
+		<!-- <result property="source" column="source" jdbcType="INTEGER"/> -->
+
+		<result property="img1" column="img1" jdbcType="VARCHAR" />
+		<result property="img2" column="img2" jdbcType="VARCHAR" />
+		<result property="img3" column="img3" jdbcType="VARCHAR" />
+		<result property="status" column="status" jdbcType="INTEGER" />
+		<result property="createDate" column="create_date" jdbcType="TIMESTAMP" />
+		<result property="crawlDate" column="crawl_date" jdbcType="TIMESTAMP" />
+		<result property="updateDate" column="update_date" jdbcType="TIMESTAMP" />
+
+		<association property="source" javaType="com.sh.domain.WebSite"
+			jdbcType="INTEGER">
+			<id property="siteId" column="site_id" />
+			<result property="siteName" column="site_name" />
+			<result property="siteUrl" column="site_url" />
+			<result property="listRange" column="list_range" />
+			<result property="titleNode" column="title_node" />
+			<result property="dateNode" column="date_node" />
+			<result property="picNode" column="pic_node" />
+			<result property="webRecordContentNode" column="web_record_content_node" />
+			<result property="siteCategory" column="site_category" />
+			<result property="siteCategoryId" column="site_category_id" />
+			<result property="createDate" column="create_date" />
+			<result property="updateDate" column="update_date" />
+			<result property="type" column="type"/>
+		</association>
+	</resultMap>
+
+	<insert id="insertWebRecordList" parameterType="java.util.List">
+		insert into t_web_record(title,href,source,img1,img2,img3,create_date,crawl_date)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.title},#{item.href},#{item.source.siteId},#{item.img1},#{item.img2},#{item.img3},#{item.createDate},#{item.crawlDate})
+		</foreach>
+
+	</insert>
+
+	<insert id="insertWebRecord" parameterType="com.sh.domain.WebRecord"
+		useGeneratedKeys="true">
+		<selectKey resultType="java.lang.Long" keyProperty="webRecordId"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_web_record(title,href,create_date,crawl_date)
+		values
+		(#{title},#{href},#{createDate},#{crawlDate})
+	</insert>
+
+
+	<update id="updateWebRecord" parameterType="com.sh.domain.WebRecord">
+		update t_web_record
+		<set>
+			<if test="title != null">
+				title = #{title},
+			</if>
+			<if test="href != null">
+				href = #{href},
+			</if>
+			<if test="content != null">
+				title = #{content},
+			</if>
+			<if test="source != null">
+				source = #{source},
+			</if>
+			<if test="create_date != null">
+				create_date = #{create_date},
+			</if>
+			<if test="crawl_date != null">
+				crawl_date = #{crawl_date},
+			</if>
+			<if test="update_date != null">
+				update_date = #{update_date},
+			</if>
+		</set>
+		where web_record_id = #{webRecordId}
+	</update>
+
+	<select id="selectUnCrawledWebRecordById" resultMap="webRecordMap"
+		parameterType="Map">
+		select * from t_web_record where web_record_id >
+		#{param1} and status = 0
+		limit #{param2}
+	</select>
+
+</mapper>
