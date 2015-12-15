@@ -11,5 +11,11 @@ public class DateUtil {
 		Date date = sdf.parse(dateStr);
 		return date;
 	}
+	
+	public static String date2String(Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateStr = sdf.format(date);
+		return dateStr;
+	}
 
 }

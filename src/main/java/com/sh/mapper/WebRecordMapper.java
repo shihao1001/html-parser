@@ -13,5 +13,7 @@ public interface WebRecordMapper {
 	public void updateWebRecord(WebRecord webRecord);
 	
 	public List<WebRecord> selectUnCrawledWebRecordById(long beginId,Integer limitNo);
+	
+	public void updateWebRecordList(List<Long> webRecordList);
 
 }
