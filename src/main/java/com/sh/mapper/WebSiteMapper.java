@@ -1,5 +1,6 @@
 package com.sh.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.sh.domain.WebSite;
@@ -7,5 +8,6 @@ import com.sh.domain.WebSite;
 public interface WebSiteMapper {
 	
 	public List<WebSite> getAllWebSites();
+	public void updateBeginDate(Date beginDate,Integer siteId);
 
 }

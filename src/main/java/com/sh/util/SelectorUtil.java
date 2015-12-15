@@ -3,10 +3,18 @@ package com.sh.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class SelectorUtil {
+	
+	
+	public static Element htmlPath2Element(Document doc,String htmlPath){
+		
+		
+		return null;
+	}
 	
 	public static String tagString2SelectorQuery(String str){
 		String selectorQuery = "";	
@@ -22,7 +30,7 @@ public class SelectorUtil {
 	}
 	
 	
-	public static Element pathString2Element(Elements listRangeElements,String path){
+	public static Element pathString2Element(Elements webRecords,String path){
 		
 		//String path = "div[NO]/h3/a";
 		
@@ -34,7 +42,6 @@ public class SelectorUtil {
 		
 		for(int i=0;i<tags.length;i++){
 			String tagWithIndex = tags[i];
-			System.out.println("tagWithIndex:"+tagWithIndex);
 			String tag = "";
 			Integer index = 0;
 			if(tagWithIndex.endsWith("]")){	
@@ -47,18 +54,21 @@ public class SelectorUtil {
 			if(index != 0){
 				if(i == 0){
 					//ele = listRangeElements.select(tag).get(index);
-					ele = listRangeElements.get(index);
+					ele = webRecords.get(index);
 				}else{
 					ele = ele.children().select(tag).get(index-1);
 				}	
 			}else{
 				if(i == 0){
-					ele = listRangeElements.select(tag).first();
+					ele = webRecords.select(tag).first();
 				}else{
 					ele = ele.children().select(tag).first();
-				}
-				
+				}		
 			}
+			if(ele == null) break;
+			System.out.println("#############################");
+			System.out.println(ele);
+			System.out.println("#############################");
 			
 		}
 		return ele;

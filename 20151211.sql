@@ -13,6 +13,11 @@ CREATE TABLE t_website(
    update_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='站点表'
 
+ALTER TABLE t_website ADD COLUMN nextpage VARCHAR(64)
+alter table t_website add column type int default 0;
+alter table t_website add column begindate timestamp;
+
+
 
 INSERT INTO t_website(site_name,site_url,list_range,title_node,date_node,pic_node,web_record_content_node,site_category,site_category_id) VALUES("安徽网-房产","http://www.ahwang.cn/house/@@@page@@@.shtml","<div id=category class=clearfix>","div[NO]/h3/a","div[NO]/div/div[2]/div/div/div/span","div[NO]/div/div[1]/a/img","<p class=describe>;<div class=article-content fontSizeBig>","房产",1);
 

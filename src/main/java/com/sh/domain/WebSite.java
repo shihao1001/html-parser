@@ -16,11 +16,25 @@ public class WebSite {
 	private String webRecordContentNode;
 	private Date createDate;
 	private Date updateDate;
+	private String nextPage;
+	private Date beginDate;
 	
+	public Date getBeginDate() {
+		return beginDate;
+	}
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
 	private Integer type;
 	
 	public Integer getType() {
 		return type;
+	}
+	public String getNextPage() {
+		return nextPage;
+	}
+	public void setNextPage(String nextPage) {
+		this.nextPage = nextPage;
 	}
 	public void setType(Integer type) {
 		this.type = type;
