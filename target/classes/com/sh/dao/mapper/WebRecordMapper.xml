@@ -20,8 +20,7 @@
 			/> <result property="updateDate" column="update_date" jdbcType="TIMESTAMP" 
 			/> -->
 
-		<association property="source" javaType="com.sh.domain.WebSite"
-			jdbcType="INTEGER">
+		<association property="source" javaType="com.sh.domain.WebSite">
 			<id property="siteId" column="site_id" />
 			<!--<result property="siteName" column="site_name" /> 
 			    <result property="siteUrl" column="site_url" /> 
@@ -51,9 +50,8 @@
 
 
 	<update id="updateWebRecordList" parameterType="java.util.List">
-		update t_web_record set status = 1 where id in
-		<foreach collection="list" item="itme" separator="," open="("
-			close=")">
+		update t_web_record set status = 1 where web_record_id in
+		<foreach collection="list" item="item" separator="," open="(" close=")">
 			#{item}
 		</foreach>
 
@@ -101,8 +99,8 @@
 
 	<select id="selectUnCrawledWebRecordById" resultMap="webRecordMap"
 		parameterType="Map">
-		select * from t_web_record where web_record_id >
-		#{param1} and status = 0
+		select * from t_web_record,t_website where web_record_id >
+		#{param1} and t_web_record.source = t_website.site_id and status = 0  
 		limit #{param2}
 	</select>
 

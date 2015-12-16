@@ -14,10 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sh.domain.WebRecord;
-import com.sh.domain.WebSite;
 import com.sh.http.HttpClientStream;
 import com.sh.mapper.WebRecordMapper;
-import com.sh.mapper.WebSiteMapper;
 import com.sh.util.DateUtil;
 import com.sh.util.SelectorUtil;
 import com.sh.util.SessionFactoryUtil;
@@ -55,9 +53,10 @@ public class WebRecordDetailParser {
 				.getMapper(WebRecordMapper.class);
 
 		List<WebRecord> webRecordList = webRecordMapper.selectUnCrawledWebRecordById(latestParsedWebRecordId, limit);
-		for(WebRecord webRecord : webRecordList){
+		/*for(WebRecord webRecord : webRecordList){
 			System.out.println(webRecord.getSource().getWebRecordContentNode());
-		}
+		}*/
+		logger.info("共需要爬取："+webRecordList.size()+"条记录！！");
 		List<Long> updatedWebRecordIds = new ArrayList<Long>();
 		for(WebRecord webRecord: webRecordList){
 		     try {
@@ -68,14 +67,20 @@ public class WebRecordDetailParser {
 				logger.error(String.format("id为：%d的webRecord存储失败！", webRecord.getWebRecordId()), e);
 			}
 		}	
-		updateWebRecordListStatus(webRecordMapper,updatedWebRecordIds);
+		try {
+			updateWebRecordListStatus(webRecordMapper,updatedWebRecordIds);
+		} catch (Exception e) {
+			logger.error("更新webRecordStatus出错!",e);
+		}
 		session.commit();
 		session.close();
 	}
 	
 	private void updateWebRecordListStatus(WebRecordMapper webRecordMapper,
-			List<Long> updatedWebRecordIds) {
+			List<Long> updatedWebRecordIds) throws Exception{
+		logger.info("更新webRecords");
 		webRecordMapper.updateWebRecordList(updatedWebRecordIds);
+		logger.info("更新webRecords完毕");
 		
 	}
 	private boolean parserHandlerWebRecord(WebRecord webRecord) throws IOException {
@@ -90,6 +95,7 @@ public class WebRecordDetailParser {
 		
 		for(String tagString : tagStrs){
 			String tagQuery = SelectorUtil.tagString2SelectorQuery(tagString);
+			logger.info("内容查询语句为："+tagQuery);
 			Elements conEles = doc.select(tagQuery);
 			content.append(conEles.html()+lineSeparator);
 		}

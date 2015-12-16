@@ -16,9 +16,10 @@ public class SelectorUtil {
 		return null;
 	}
 	
-	public static String tagString2SelectorQuery(String str){
+	public static String tagString2SelectorQuery2(String str){
 		String selectorQuery = "";	
-		//listRange   <div id=category class=clearfix>		
+		//listRange   <div id=category@@class=clearfix>		
+		//<p class=describe>;<div class=article-content fontSizeBig>
 		str = str.substring(1, str.length()-1).trim();
 		String[] strs = str.split(" ");
 		String tag = strs[0];
@@ -28,6 +29,25 @@ public class SelectorUtil {
 		}
 		return selectorQuery;	
 	}
+	
+	
+	public static String tagString2SelectorQuery(String str){
+		String selectorQuery = "";	
+		//listRange   <div id=category@@class=clearfix>		
+		//<p class=describe>;<div class=article-content fontSizeBig>
+		str = str.substring(1, str.length()-1).trim();
+		int firstBlankIndex = str.indexOf(" ");
+		String tag = str.substring(0, firstBlankIndex);
+		String attrs = str.substring(firstBlankIndex+1);
+		String[] attrArray = attrs.split("@@");
+		selectorQuery = selectorQuery+tag;
+		for(String attr : attrArray){
+			selectorQuery = selectorQuery +"[" +attr + "]";
+		}
+		
+		return selectorQuery;	
+	}
+	
 	
 	
 	public static Element pathString2Element(Elements webRecords,String path){
