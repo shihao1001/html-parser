@@ -11,9 +11,40 @@ public class SelectorUtil {
 	
 	
 	public static Element htmlPath2Element(Document doc,String htmlPath){
-		
-		
-		return null;
+		Elements htmls = doc.getAllElements();
+		String[] tags = htmlPath.split("/");
+	    Element ele = null;
+		for(int i=0;i<tags.length;i++){
+			String tagWithIndex = tags[i];
+			String tag = "";
+			Integer index = 0;
+			if(tagWithIndex.endsWith("]")){	
+				index = Integer.parseInt(tagWithIndex.substring(0, tagWithIndex.length()-1).replaceAll("\\[", ",").split(",")[1]);
+				tag = tagWithIndex.substring(0, tagWithIndex.length()-1).replaceAll("\\[", ",").split(",")[0];		
+			}else{
+				index = 0;
+				tag = tagWithIndex;
+			}
+			if(index != 0){
+				if(i == 0){
+					//ele = listRangeElements.select(tag).get(index);
+					ele = htmls.get(index);
+				}else{
+					ele = ele.children().select(tag).get(index-1);
+				}	
+			}else{
+				if(i == 0){
+					ele = htmls.select(tag).first();
+				}else{
+					ele = ele.children().select(tag).first();
+				}		
+			}
+			if(ele == null) break;
+			System.out.println("#############################");
+			System.out.println(ele);
+			System.out.println("#############################");	
+		}
+		return ele;
 	}
 	
 	public static String tagString2SelectorQuery2(String str){
